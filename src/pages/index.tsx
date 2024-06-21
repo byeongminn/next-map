@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div>
+    <>
       <h1>Map Index Page</h1>
       <ul>
         <li>
@@ -27,6 +27,6 @@ export default function Home() {
           <Link href="/users/likes">찜한 맛집</Link>
         </li>
       </ul>
-    </div>
+    </>
   );
 }
