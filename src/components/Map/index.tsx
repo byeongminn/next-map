@@ -1,6 +1,7 @@
 /* global kakao */
 
 import Script from 'next/script';
+import { Dispatch, SetStateAction } from 'react';
 
 declare global {
   interface Window {
@@ -8,15 +9,24 @@ declare global {
   }
 }
 
-export const Map = () => {
+const DEFAULT_LAT = 37.497625203;
+const DEFAULT_LNG = 127.03088379;
+
+interface MapProps {
+  setMap: Dispatch<SetStateAction<any>>;
+}
+
+export const Map = ({ setMap }: MapProps) => {
   const loadKakaoMap = () => {
     window.kakao.maps.load(() => {
       const mapContainer = document.getElementById('map');
       const mapOptions = {
-        center: new window.kakao.maps.LatLng(33.450701, 126.570667),
+        center: new window.kakao.maps.LatLng(DEFAULT_LAT, DEFAULT_LNG),
         level: 3,
       };
-      new window.kakao.maps.Map(mapContainer, mapOptions);
+      const map = new window.kakao.maps.Map(mapContainer, mapOptions);
+
+      setMap(map);
     });
   };
 
