@@ -32,7 +32,7 @@
 
 @media only screen and (max-width: 600px) {
   .navbar--mobile {
-    @apply fixed w-full top-[52px] bg-blue-800 text-white h-screen;
+    @apply fixed w-full top-[52px] bg-blue-800 text-white h-screen z-[100];
   }
 
   .navbar__list {
