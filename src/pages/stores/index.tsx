@@ -2,20 +2,28 @@ import { StoreType } from '@/interface';
 import Image from 'next/image';
 import axios from 'axios';
 import { useInfiniteQuery } from 'react-query';
-import { Loader, Loading } from '@/components';
-import React, { useCallback, useEffect, useRef } from 'react';
+import { Loader, Loading, SearchFilter } from '@/components';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 
 export default function StoresPage() {
   const ref = useRef<HTMLDivElement | null>(null);
   const pageRef = useIntersectionObserver(ref, {});
   const isPageEnd = !!pageRef?.isIntersecting;
+  const [q, setQ] = useState<string | null>(null);
+  const [district, setDistrict] = useState<string | null>(null);
+
+  const searchParams = {
+    q,
+    district,
+  };
 
   const fetchStores = async ({ pageParam = 1 }) => {
     const { data } = await axios('/api/stores?page=' + pageParam, {
       params: {
         limit: 10,
         page: pageParam,
+        ...searchParams,
       },
     });
 
@@ -30,7 +38,7 @@ export default function StoresPage() {
     hasNextPage,
     isError,
     isLoading,
-  } = useInfiniteQuery('stores', fetchStores, {
+  } = useInfiniteQuery(['stores', searchParams], fetchStores, {
     getNextPageParam: (lastPage: any) =>
       lastPage.data?.length > 0 ? lastPage.page + 1 : undefined,
   });
@@ -63,6 +71,7 @@ export default function StoresPage() {
 
   return (
     <div className="px-4 md:max-w-4xl mx-auto py-8">
+      <SearchFilter setQ={setQ} setDistrict={setDistrict} />
       <ul role="list" className="divide-y divide-gray-100">
         {isLoading ? (
           <Loading />
