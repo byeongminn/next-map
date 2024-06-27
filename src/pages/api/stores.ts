@@ -1,6 +1,7 @@
 import { StoreApiResponse, StoreType } from '@/interface';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '@/db';
+import axios from 'axios';
 
 interface RequestType {
   page?: string;
@@ -15,9 +16,18 @@ export default async function handler(
 ) {
   const { page = '', limit = '', q, district }: RequestType = req.query;
   if (req.method === 'POST') {
-    const data = req.body;
+    const formData = req.body;
+    const headers = {
+      Authorization: `KakaoAK ${process.env.KAKAO_CLIENT_ID}`,
+    };
+
+    const { data } = await axios.get(
+      `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURI(formData.address)}`,
+      { headers },
+    );
+
     const result = await prisma.store.create({
-      data: { ...data },
+      data: { ...formData, lat: data.documents[0].y, lng: data.documents[0].x },
     });
 
     return res.status(200).json(result);
