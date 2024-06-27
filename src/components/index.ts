@@ -7,3 +7,4 @@ export * from './Loading';
 export * from './Pagination';
 export * from './Loader';
 export * from './Marker';
+export * from './SearchFilter';
