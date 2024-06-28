@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import { StoreType } from '@/interface';
-import { Like, Loader, Map, Marker } from '@/components';
+import { Comments, Like, Loader, Map, Marker } from '@/components';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { toast } from 'react-toastify';
@@ -152,10 +152,13 @@ export default function StorePage() {
         </div>
       </div>
       {isSuccess && (
-        <div className="overflow-hidden w-full mb-20 max-w-5xl mx-auto max-h-[600px]">
-          <Map lat={store?.lat} lng={store?.lng} zoom={1} />
-          <Marker store={store} />
-        </div>
+        <>
+          <div className="overflow-hidden w-full mb-20 max-w-5xl mx-auto max-h-[600px]">
+            <Map lat={store?.lat} lng={store?.lng} zoom={1} />
+            <Marker store={store} />
+          </div>
+          <Comments storeId={store?.id} />
+        </>
       )}
     </>
   );
