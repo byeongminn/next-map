@@ -11,7 +11,7 @@ interface CommentProps {
   page: string;
 }
 
-export const Comments = ({ storeId, page }: CommentProps) => {
+export const Comments = ({ storeId, page = '1' }: CommentProps) => {
   const { status } = useSession();
 
   const fetchComments = async () => {
