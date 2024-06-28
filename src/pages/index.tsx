@@ -1,4 +1,4 @@
-import { Map, Markers, StoreBox } from '@/components';
+import { CurrentLocationButton, Map, Markers, StoreBox } from '@/components';
 import { StoreType } from '@/interface';
 import axios from 'axios';
 
@@ -16,6 +16,7 @@ export default function Home({ stores }: { stores: StoreType[] }) {
       <Map />
       <Markers stores={stores} />
       <StoreBox />
+      <CurrentLocationButton />
     </>
   );
 }

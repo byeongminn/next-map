@@ -12,3 +12,5 @@ export * from './AddressSearch';
 export * from './Like';
 export * from './StoreList';
 export * from './Comments';
+export * from './CurrentLocationButton';
+export * from './FullPageLoader';
