@@ -1,86 +1,47 @@
-import { AddressSearch, Loader } from '@/components';
+'use client';
+
+import { AddressSearch } from '@/components';
 import { CATEGORY_ARR, FOOD_CERTIFY_ARR, STORE_TYPE_ARR } from '@/data/store';
 import { StoreType } from '@/interface';
 import axios from 'axios';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
 
-export default function StoreEditPage() {
+export default function StoreNewPage() {
   const router = useRouter();
-  const { id } = router.query;
-
-  const fetchStore = async () => {
-    const { data } = await axios(`/api/stores?id=${id}`);
-    return data as StoreType;
-  };
-
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
   } = useForm<StoreType>();
-
-  const {
-    data: store,
-    isFetching,
-    isSuccess,
-    isError,
-  } = useQuery(`store-${id}`, fetchStore, {
-    onSuccess: (data) => {
-      setValue('id', data.id);
-      setValue('name', data.name);
-      setValue('phone', data.phone);
-      setValue('lat', data.lat);
-      setValue('lng', data.lng);
-      setValue('address', data.address);
-      setValue('foodCertifyName', data.foodCertifyName);
-      setValue('storeType', data.storeType);
-      setValue('category', data.category);
-    },
-    refetchOnWindowFocus: false,
-  });
-
-  if (isError) {
-    return (
-      <div className="w-full h-screen mx-auto pt-[10%] text-red-500 text-center font-semibold">
-        다시 시도해 주세요.
-      </div>
-    );
-  }
-
-  if (isFetching) {
-    return <Loader className="mt-[20%]" />;
-  }
-
   return (
     <form
       className="px-4 md:max-w-4xl mx-auto py-8 "
       onSubmit={handleSubmit(async (data) => {
         try {
-          const result = await axios.put('/api/stores', data);
+          const result = await axios.post('/api/stores', data);
 
           if (result.status === 200) {
-            toast.success('맛집을 수정했습니다.');
+            toast.success('맛집을 등록했습니다.');
             router.replace(`/stores/${result?.data?.id}`);
           } else {
             toast.error('다시 시도해 주세요.');
           }
         } catch (e) {
           console.log(e);
-          toast.error('데이터 수정 중 문제가 생겼습니다. 다시 시도해 주세요.');
+          toast.error('데이터 생성 중 문제가 생겼습니다. 다시 시도해 주세요.');
         }
       })}
     >
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
           <h2 className="text-base font-semibold leading-7 text-gray-900">
-            맛집 수정
+            맛집 등록
           </h2>
           <p className="mt-1 text-sm leading-6 text-gray-600">
-            아래 내용을 입력해서 맛집을 수정해 주세요.
+            아래 내용을 입력해서 맛집을 등록해 주세요.
           </p>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -227,7 +188,7 @@ export default function StoreEditPage() {
           type="submit"
           className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
-          수정하기
+          제출하기
         </button>
       </div>
     </form>
