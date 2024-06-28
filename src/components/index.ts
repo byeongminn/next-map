@@ -11,3 +11,4 @@ export * from './SearchFilter';
 export * from './AddressSearch';
 export * from './Like';
 export * from './StoreList';
+export * from './Comments';
